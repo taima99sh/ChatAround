@@ -120,13 +120,10 @@ extension ViewController: CLLocationManagerDelegate {
     }
     //UPDATE
     func addPins() {
-        if let userLocation = self.userLocation {
-            let annotations = mapView.annotations.filter({ !($0 is MKUserLocation) })
-            mapView.removeAnnotations(annotations)
-            for user in users {
-                mapView.addAnnotation(user)
-            }
-            render(userLocation)
+        let annotations = mapView.annotations.filter({ !($0 is MKUserLocation) })
+        mapView.removeAnnotations(annotations)
+        for user in users {
+            mapView.addAnnotation(user)
         }
     }
 }
