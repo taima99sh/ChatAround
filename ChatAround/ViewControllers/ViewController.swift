@@ -24,13 +24,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     let bottomSheetVC = InfoSheetViewController()
-    var timer = RepeatingTimer(timeInterval: 30 * 60)
+    var timer = RepeatingTimer(timeInterval: 30)
     
     //var locations: [CLLocation] = []
     var cUsers: [UserModel] = []
     var users: [UserModel] = []
     var userLocation: CLLocation?
     let manager = CLLocationManager ()
+    var isFirstTime: Bool = true
     var distance: Double {
         return 30000
     }
@@ -107,11 +108,14 @@ extension ViewController: CLLocationManagerDelegate {
             let ref = db.collection("User").document(userID)
             ref.setData( ["geoPoint": GeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)], merge: true)
         }
-        render(location)
+        self.render(location, isFirstTime)
         self.addPins()
        }
     }
-    func render(_ location: CLLocation) {
+    
+    func render(_ location: CLLocation, _ isFirstTime: Bool) {
+        guard self.isFirstTime else {return}
+        self.isFirstTime = !self.isFirstTime
         let x = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: distance, longitudinalMeters: distance)
         mapView.cameraZoomRange = MKMapView.CameraZoomRange(minCenterCoordinateDistance: 250,
         maxCenterCoordinateDistance: distance)
@@ -145,7 +149,7 @@ extension ViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let pin  = annotation as? UserModel {
             let pinView = MKAnnotationView(annotation: pin, reuseIdentifier: "EcoPin")
-                let transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            let transform = CGAffineTransform(scaleX: 0.25, y: 0.25)
                 pinView.transform = transform
                 pinView.image = pin.image
                 return pinView
@@ -166,6 +170,7 @@ extension ViewController {
             }
             
             if let querySnapshot = querySnapshot, let userLocation = self.userLocation {
+                self.cUsers.removeAll()
                 for doc in querySnapshot.documents {
                     let result = Result {
                         try doc.data(as: UserModel.self)
