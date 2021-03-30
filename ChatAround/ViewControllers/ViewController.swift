@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     let bottomSheetVC = InfoSheetViewController()
-    var timer = RepeatingTimer(timeInterval: 30)
+    var timer = RepeatingTimer(timeInterval: 30 * 60)
     
     //var locations: [CLLocation] = []
     var cUsers: [UserModel] = []
@@ -130,6 +130,15 @@ extension ViewController: CLLocationManagerDelegate {
             mapView.addAnnotation(user)
         }
     }
+    
+    func setMapBound() {
+        if let userLocation = self.userLocation {
+            let x = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: distance, longitudinalMeters: distance)
+            mapView.cameraZoomRange = MKMapView.CameraZoomRange(minCenterCoordinateDistance: 250,
+            maxCenterCoordinateDistance: distance)
+            mapView.setCameraBoundary(MKMapView.CameraBoundary(coordinateRegion: x), animated: true)
+        }
+    }
 }
 
 extension ViewController: MKMapViewDelegate {
@@ -194,6 +203,7 @@ extension ViewController {
                 }
                 self.users = self.cUsers
                 self.bottomSheetVC.tableView.reloadData()
+                self.setMapBound()
                 self.addPins()
             }
         }
