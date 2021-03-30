@@ -20,7 +20,7 @@ class InfoSheetViewController: UIViewController {
     var user: UserModel?
     var fullView: CGFloat = 100
     var partialView: CGFloat {
-        return UIScreen.main.bounds.height - (searchBar.frame.maxY + 10)
+        return UIScreen.main.bounds.height - (searchBar.frame.maxY + 25)
     }
     
     override func viewDidLoad() {
