@@ -46,10 +46,11 @@ extension LoginViewController {
             
             if let authResult = authResult {
                 UserProfile.shared.userID = authResult.user.uid
+                let ref = db.collection("User").document(UserProfile.shared.userID ?? "")
+                ref.setData( ["isOnline": true], merge: true)
                 let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "ViewController") as!ViewController
                 AppDelegate.shared.rootNavigationViewController.setViewControllers([vc], animated: true)
             }
         }
     }
-
 }

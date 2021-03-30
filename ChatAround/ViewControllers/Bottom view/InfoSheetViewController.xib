@@ -25,7 +25,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v25-LA-8Hg">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                     <subviews>
                         <searchBar clipsSubviews="YES" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="NuV-j4-OaF">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
@@ -40,7 +40,7 @@
                             </userDefinedRuntimeAttributes>
                         </searchBar>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="a0n-J5-WgF">
-                            <rect key="frame" x="0.0" y="65" width="414" height="831"/>
+                            <rect key="frame" x="0.0" y="65" width="414" height="797"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="VZl-fs-rIL">
                                     <rect key="frame" x="20" y="0.0" width="374" height="388.5"/>
@@ -133,7 +133,7 @@
                             <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="20" bottom="20" trailing="20"/>
                         </stackView>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pqa-Zk-RxL">
-                            <rect key="frame" x="0.0" y="50" width="414" height="846"/>
+                            <rect key="frame" x="0.0" y="50" width="414" height="812"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         </tableView>
                     </subviews>
@@ -163,7 +163,7 @@
                 <constraint firstItem="v25-LA-8Hg" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="7Jf-ME-BYr"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="v25-LA-8Hg" secondAttribute="trailing" id="Ktg-Ll-ErV"/>
                 <constraint firstItem="v25-LA-8Hg" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="WT4-tZ-e5S"/>
-                <constraint firstAttribute="bottom" secondItem="v25-LA-8Hg" secondAttribute="bottom" id="l3g-tu-cxL"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="v25-LA-8Hg" secondAttribute="bottom" id="l3g-tu-cxL"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <userDefinedRuntimeAttributes>

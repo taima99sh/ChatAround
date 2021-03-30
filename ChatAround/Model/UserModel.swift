@@ -16,13 +16,16 @@ class UserModel: NSObject, Codable, MKAnnotation{
     var name: String
     var email: String
     var token: String
+    var isOnline: Bool?
+    var image: UIImage = #imageLiteral(resourceName: "homeImage")
     var geoPoint: GeoPoint?{
         didSet {
             self.coordinate = CLLocationCoordinate2D(latitude: geoPoint?.latitude ?? 0, longitude: geoPoint?.longitude ?? 0)
         }
     }
     
-    init(name: String, email: String,token: String, geoPoint: GeoPoint) {
+    init(name: String, email: String,token: String, geoPoint: GeoPoint, isOnline: Bool) {
+        self.isOnline = isOnline
         self.name = name
         self.email = email
         self.token = token
@@ -35,6 +38,7 @@ class UserModel: NSObject, Codable, MKAnnotation{
                 case email = "email"
                 case token = "token"
                 case geoPoint = "geoPoint"
+                case isOnline = "isOnline"
     }
 }
 

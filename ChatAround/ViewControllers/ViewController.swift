@@ -12,6 +12,8 @@ import CoreLocation
 import Firebase
 import FirebaseFirestoreSwift
 
+let db = Firestore.firestore()
+
 struct Person {
     var name: String
     var image: String
@@ -29,6 +31,9 @@ class ViewController: UIViewController {
     var users: [UserModel] = []
     var userLocation: CLLocation?
     let manager = CLLocationManager ()
+    var distance: Double {
+        return 30000
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +53,11 @@ class ViewController: UIViewController {
     @IBAction func btnLogout(_ sender: Any) {
         do {
            try Auth.auth().signOut()
+            if let userID = UserProfile.shared.userID {
+                let db = Firestore.firestore()
+                let ref = db.collection("User").document(userID)
+                ref.setData( ["isOnline": false], merge: true)
+            }
            UserDefaults.resetDefaults()
            let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
            AppDelegate.shared.rootNavigationViewController.setViewControllers([vc], animated: true)
@@ -93,7 +103,6 @@ extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
        if let location = locations.last {
         self.userLocation = location
-        let db = Firestore.firestore()
         if let userID = UserProfile.shared.userID {
             let ref = db.collection("User").document(userID)
             ref.setData( ["geoPoint": GeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)], merge: true)
@@ -102,9 +111,11 @@ extension ViewController: CLLocationManagerDelegate {
         self.addPins()
        }
     }
-
     func render(_ location: CLLocation) {
-        let x = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 30000, longitudinalMeters: 30000)
+        let x = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: distance, longitudinalMeters: distance)
+        mapView.cameraZoomRange = MKMapView.CameraZoomRange(minCenterCoordinateDistance: 250,
+        maxCenterCoordinateDistance: distance)
+        mapView.setCameraBoundary(MKMapView.CameraBoundary(coordinateRegion: x), animated: true)
         mapView.setRegion(x, animated: true)
     }
     //UPDATE
@@ -113,15 +124,9 @@ extension ViewController: CLLocationManagerDelegate {
             let annotations = mapView.annotations.filter({ !($0 is MKUserLocation) })
             mapView.removeAnnotations(annotations)
             for user in users {
-                user.coordinate = CLLocationCoordinate2D(latitude: user.geoPoint?.latitude ?? 0, longitude: user.geoPoint?.longitude ?? 0)
-                
-                let location = CLLocation(latitude: user.coordinate.latitude, longitude: user.coordinate.longitude)
-                if userLocation.distance(from: location) > 30000 {
-                    continue
-                }
                 mapView.addAnnotation(user)
-                render(userLocation)
             }
+            render(userLocation)
         }
     }
 }
@@ -132,6 +137,7 @@ extension ViewController: MKMapViewDelegate {
         print("didDeSelect Function")
         bottomSheetVC.close()
     }
+    
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView){
         bottomSheetVC.user = view.annotation as? UserModel
@@ -139,19 +145,30 @@ extension ViewController: MKMapViewDelegate {
        print("didSelectAnnotationTapped")
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if let pin  = annotation as? UserModel {
+            let pinView = MKAnnotationView(annotation: pin, reuseIdentifier: "EcoPin")
+                let transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                pinView.transform = transform
+                pinView.image = pin.image
+                return pinView
+        }
+          return nil
+    }
 }
 extension ViewController {
     
     func fetchUsers() {
         let db = Firestore.firestore()
         let userRef = db.collection("User")
-        userRef.getDocuments { (querySnapshot, error) in
+        let query = userRef.whereField("isOnline", isEqualTo: true)
+        query.getDocuments { (querySnapshot, error) in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
             
-            if let querySnapshot = querySnapshot {
+            if let querySnapshot = querySnapshot, let userLocation = self.userLocation {
                 for doc in querySnapshot.documents {
                     let result = Result {
                         try doc.data(as: UserModel.self)
@@ -159,6 +176,11 @@ extension ViewController {
                     switch result {
                     case .success(let user):
                         if let user = user {
+                            user.coordinate = CLLocationCoordinate2D(latitude: user.geoPoint?.latitude ?? 0, longitude: user.geoPoint?.longitude ?? 0)
+                            let location = CLLocation(latitude: user.coordinate.latitude, longitude: user.coordinate.longitude)
+                            if (userLocation.distance(from: location) > self.distance) || user.token == UserProfile.shared.userID || location == userLocation {
+                                continue
+                            }
                             self.cUsers.append(user)
                             print("\(user.email)")
                         } else {

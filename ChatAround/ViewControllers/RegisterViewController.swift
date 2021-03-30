@@ -30,9 +30,7 @@ class RegisterViewController: UIViewController {
     @IBAction func btnSignup(_ sender: Any) {
         createUser()
     }
-    
-    
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
@@ -40,7 +38,7 @@ class RegisterViewController: UIViewController {
 extension RegisterViewController {
     func setupData(){}
     func createUser(){
-        let db = Firestore.firestore()
+        //let db = Firestore.firestore()
         let email = self.txtEmail.text ?? ""
         let password = self.txtPassword.text ?? ""
         let name = self.txtName.text ?? ""
@@ -53,11 +51,7 @@ extension RegisterViewController {
             if let authResult = data {
                 //let userLocation = MKUserLocation.self
                 
-                let user = UserModel(name: name, email: email, token: authResult.user.uid , geoPoint: GeoPoint(latitude: 0, longitude: 0))
-                //, coorinate: GeoPoint(latitude: 34.4884958, longitude: 31.5294135)
-            
-               // let point: GeoPoint
-                
+                let user = UserModel(name: name, email: email, token: authResult.user.uid , geoPoint: GeoPoint(latitude: 0, longitude: 0), isOnline: true)                
                 do {
                     let userRef = db.collection("User").document(authResult.user.uid)
                     try userRef.setData(from: user)
