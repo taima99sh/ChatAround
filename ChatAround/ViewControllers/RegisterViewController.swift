@@ -47,24 +47,37 @@ extension RegisterViewController {
                 print(error.localizedDescription)
                 return
             }
-            
+
             if let authResult = data {
-                //let userLocation = MKUserLocation.self
                 
-                let user = UserModel(name: name, email: email, token: authResult.user.uid , geoPoint: GeoPoint(latitude: 0, longitude: 0), isOnline: true)                
+//                let currentUser = Auth.auth().currentUser
+//                if let user = currentUser {
+//                    let changeRequest = user.createProfileChangeRequest()
+//                   changeRequest.displayName = " "
+//                    changeRequest.commitChanges { error in
+//                     if let error = error {
+//                        print(error.localizedDescription)
+//                        return
+//                       // An error happened.
+//                     }
+//
+//                   }
+//                }
+                //
+                let user = UserModel(name: name, email: email, token: authResult.user.uid , geoPoint: GeoPoint(latitude: 0, longitude: 0), isOnline: true)
+                //let userLocation = MKUserLocation.self
                 do {
                     let userRef = db.collection("User").document(authResult.user.uid)
                     try userRef.setData(from: user)
                     
                     UserProfile.shared.userID = authResult.user.uid
-                    
+                    UserProfile.shared.userName = user.name
                     let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
                     
                     AppDelegate.shared.rootNavigationViewController.setViewControllers([vc], animated: true)
                 } catch let error {
                     print("Error writing user to Firestore: \(error.localizedDescription)")
                 }
-
             }
         }
     }

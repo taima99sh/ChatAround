@@ -132,6 +132,13 @@
                             </subviews>
                             <directionalEdgeInsets key="directionalLayoutMargins" top="0.0" leading="20" bottom="20" trailing="20"/>
                         </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ati-uP-ifS">
+                            <rect key="frame" x="20" y="65" width="22" height="22"/>
+                            <state key="normal" image="message.fill" catalog="system"/>
+                            <connections>
+                                <action selector="funcToChat:" destination="-1" eventType="touchUpInside" id="WOa-Wz-pQw"/>
+                            </connections>
+                        </button>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pqa-Zk-RxL">
                             <rect key="frame" x="0.0" y="50" width="414" height="812"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -141,6 +148,7 @@
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="NuV-j4-OaF" secondAttribute="trailing" id="0jq-9h-DXm"/>
                         <constraint firstAttribute="trailing" secondItem="a0n-J5-WgF" secondAttribute="trailing" id="4gc-eB-JaU"/>
+                        <constraint firstItem="ati-uP-ifS" firstAttribute="top" secondItem="a0n-J5-WgF" secondAttribute="top" id="BO9-cl-O5P"/>
                         <constraint firstItem="a0n-J5-WgF" firstAttribute="top" secondItem="NuV-j4-OaF" secondAttribute="bottom" constant="15" id="EqM-TF-pUI"/>
                         <constraint firstAttribute="bottom" secondItem="pqa-Zk-RxL" secondAttribute="bottom" id="Hv1-76-DHq"/>
                         <constraint firstItem="pqa-Zk-RxL" firstAttribute="top" secondItem="NuV-j4-OaF" secondAttribute="bottom" id="SrG-7F-PQ5"/>
@@ -149,6 +157,7 @@
                         <constraint firstItem="a0n-J5-WgF" firstAttribute="leading" secondItem="v25-LA-8Hg" secondAttribute="leading" id="mYF-ir-dG9"/>
                         <constraint firstAttribute="trailing" secondItem="pqa-Zk-RxL" secondAttribute="trailing" id="nat-N4-Q8K"/>
                         <constraint firstItem="NuV-j4-OaF" firstAttribute="leading" secondItem="v25-LA-8Hg" secondAttribute="leading" id="taa-zA-7Ps"/>
+                        <constraint firstItem="ati-uP-ifS" firstAttribute="leading" secondItem="VZl-fs-rIL" secondAttribute="leading" id="tbZ-od-bpx"/>
                         <constraint firstItem="NuV-j4-OaF" firstAttribute="top" secondItem="v25-LA-8Hg" secondAttribute="top" id="yg8-gW-ol6"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
@@ -176,5 +185,6 @@
     </objects>
     <resources>
         <image name="homeImage" width="153" height="153"/>
+        <image name="message.fill" catalog="system" width="64" height="56"/>
     </resources>
 </document>

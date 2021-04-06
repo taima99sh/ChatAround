@@ -23,6 +23,17 @@ class UserProfile {
         }
     }
     
+    
+    var userName: String? {
+        get {
+            return UserDefaults.standard.value(forKey: "userName") as? String
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: "userName")
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
     func isUserLogin() -> Bool {
         return  Auth.auth().currentUser != nil
     }

@@ -31,8 +31,6 @@ class LoginViewController: UIViewController {
         let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "RegisterViewController") as! RegisterViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
 }
 extension LoginViewController {
     func login(){
@@ -43,13 +41,39 @@ extension LoginViewController {
                 print(error.localizedDescription)
                 return
             }
-            
             if let authResult = authResult {
                 UserProfile.shared.userID = authResult.user.uid
+                UserProfile.shared.userName = authResult.user.displayName
                 let ref = db.collection("User").document(UserProfile.shared.userID ?? "")
-                ref.setData( ["isOnline": true], merge: true)
-                let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "ViewController") as!ViewController
+                //ref.setData( ["isOnline": true], merge: true)
+                ref.updateData(["isOnline": true])
+                self.getUserInfo(ref)
+                let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
                 AppDelegate.shared.rootNavigationViewController.setViewControllers([vc], animated: true)
+            }
+        }
+    }
+    
+    func getUserInfo(_ ref: DocumentReference) {
+        
+        ref.getDocument { (doc, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            if let doc = doc {
+                let result = Result {
+                    try doc.data(as: UserModel.self)
+                }
+                switch result {
+                    
+                case .success(let user):
+                    guard let user = user else {return}
+                    UserProfile.shared.userName = user.name
+                case .failure(let error):
+                    print(error)
+                }
             }
         }
     }

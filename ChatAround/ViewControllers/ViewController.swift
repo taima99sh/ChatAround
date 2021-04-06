@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     let bottomSheetVC = InfoSheetViewController()
-    var timer = RepeatingTimer(timeInterval: 30 * 60)
+    var timer = RepeatingTimer(timeInterval: 30)
     
     //var locations: [CLLocation] = []
     var cUsers: [UserModel] = []
@@ -58,6 +58,8 @@ class ViewController: UIViewController {
                 let db = Firestore.firestore()
                 let ref = db.collection("User").document(userID)
                 ref.setData( ["isOnline": false], merge: true)
+//                ref.updateData(["isOnline": false])
+//                ref.updateData(["name": "test"])
             }
            UserDefaults.resetDefaults()
            let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController

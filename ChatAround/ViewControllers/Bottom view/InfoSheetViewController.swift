@@ -39,6 +39,13 @@ class InfoSheetViewController: UIViewController {
         close()
     }
     
+    @IBAction func funcToChat(_ sender: Any) {
+        let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        vc.user = self.user
+        
+        AppDelegate.shared.rootNavigationViewController.pushViewController(vc, animated: true)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -12,11 +12,11 @@
             <objects>
                 <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="ChatAround" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="S5w-zt-Api">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -29,6 +29,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="3jn-9M-ErO">
+                        <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="dMW-yL-eWm">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="A8W-xx-45h">
                                 <rect key="frame" x="302" y="7" width="92" height="30"/>
@@ -40,6 +41,7 @@
                             </button>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="mapView" destination="S5w-zt-Api" id="Nk3-lK-NWp"/>
                     </connections>
@@ -179,6 +181,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XIe-6E-zQw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2339.130434782609" y="114.50892857142857"/>
+        </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="Iqk-lw-KYu">
+            <objects>
+                <viewController storyboardIdentifier="ChatViewController" id="Typ-a9-w2g" customClass="ChatViewController" customModule="ChatAround" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sbt-GB-Aux">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="3tw-Zb-77S"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="dOK-bb-e9E"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YiK-CB-MFH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3028" y="115"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="fhu-Gl-6eD">

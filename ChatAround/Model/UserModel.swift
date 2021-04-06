@@ -9,8 +9,10 @@
 import Foundation
 import MapKit
 import FirebaseFirestore
+import MessageKit
 
-class UserModel: NSObject, Codable, MKAnnotation{
+class UserModel: NSObject, Codable, MKAnnotation {
+    
     var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0, longitude: 0)
     
     var name: String
@@ -40,6 +42,13 @@ class UserModel: NSObject, Codable, MKAnnotation{
                 case geoPoint = "geoPoint"
                 case isOnline = "isOnline"
     }
+}
+
+struct MessageModel: Codable {
+    let sender: String
+    let message: String
+    let senderName: String
+    let date: Date
 }
 
 
