@@ -23,18 +23,20 @@ class UserModel: NSObject, Codable, MKAnnotation {
     var gender: String?
     var Db: String?
     var image: UIImage = #imageLiteral(resourceName: "homeImage")
+    var img: String?
     var geoPoint: GeoPoint?{
         didSet {
             self.coordinate = CLLocationCoordinate2D(latitude: geoPoint?.latitude ?? 0, longitude: geoPoint?.longitude ?? 0)
         }
     }
     
-    init(name: String, email: String,token: String, geoPoint: GeoPoint, isOnline: Bool) {
+    init(name: String, email: String,token: String, geoPoint: GeoPoint, isOnline: Bool, img: String = "") {
         self.isOnline = isOnline
         self.name = name
         self.email = email
         self.token = token
         self.geoPoint = geoPoint
+        self.img = img
         self.coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
     }
     

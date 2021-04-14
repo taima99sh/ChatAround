@@ -36,7 +36,6 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController {
     func login(){
-        
         let email = self.txtEmail.text ?? ""
         let password = self.txtPassword.text ?? ""
         self.showIndicator()

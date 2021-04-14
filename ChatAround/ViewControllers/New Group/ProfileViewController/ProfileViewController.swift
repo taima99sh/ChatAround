@@ -33,12 +33,18 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func btnFriends(_ sender: Any) {
+        let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "FriendsViewController") as! FriendsViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func btnFriendRequest(_ sender: Any) {
+        let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "FriendRequestsViewController") as! FriendRequestsViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func btnRemarkables(_ sender: Any) {
+        let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "RemarkablesViewController") as! RemarkablesViewController
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func btnLogout(_ sender: Any) {
@@ -60,7 +66,6 @@ class ProfileViewController: UIViewController {
             }
         }) {
         }
-            
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,18 +73,14 @@ class ProfileViewController: UIViewController {
     }
 }
 extension ProfileViewController {
-    
-    
-    func acceptRequest() {
-    }
     func setupView(){}
     func localized(){}
     func setupData(){
         guard let user = user else {return}
         self.lblName.text = user.name
-        self.lblEmail.text = user.email
-        self.lblDB.text = user.Db ?? ""
-        self.lblGender.text = user.gender ?? ""
+        self.lblEmail.text = "Email: \(user.email)"
+        self.lblDB.text = "Date of birth: \(user.Db ?? "")"
+        self.lblGender.text = "Gender: \(user.gender ?? "")"
     }
     func fetchData(){
         let docRef = db.collection("User").document(UserProfile.shared.userID ?? "")

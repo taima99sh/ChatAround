@@ -59,7 +59,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qoe-M4-vIU">
-                                <rect key="frame" x="41.5" y="323" width="331" height="250"/>
+                                <rect key="frame" x="41.5" y="296" width="331" height="304"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tMa-zd-iOk">
                                         <rect key="frame" x="0.0" y="0.0" width="331" height="34"/>
@@ -77,8 +77,17 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R0c-El-wmb">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eOP-IU-UqF">
                                         <rect key="frame" x="0.0" y="108" width="331" height="34"/>
+                                        <state key="normal" title="Pick an image ">
+                                            <color key="titleColor" white="0.0" alpha="0.90162136130136983" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btnAddImage:" destination="n7o-lM-tK8" eventType="touchUpInside" id="w0b-5I-Prg"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R0c-El-wmb">
+                                        <rect key="frame" x="0.0" y="162" width="331" height="34"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="bv2-Kt-zUb">
                                                 <rect key="frame" x="0.0" y="0.0" width="331" height="34"/>
@@ -125,7 +134,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Wsz-2R-gYT">
-                                        <rect key="frame" x="0.0" y="162" width="331" height="34"/>
+                                        <rect key="frame" x="0.0" y="216" width="331" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34" id="2ax-5t-W62"/>
                                         </constraints>
@@ -133,7 +142,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h3e-MS-UvO">
-                                        <rect key="frame" x="0.0" y="216" width="331" height="34"/>
+                                        <rect key="frame" x="0.0" y="270" width="331" height="34"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Sign up">
@@ -145,16 +154,26 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d2e-Px-Ea5">
+                                <rect key="frame" x="132" y="106" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="R6a-u0-il5"/>
+                                    <constraint firstAttribute="width" secondItem="d2e-Px-Ea5" secondAttribute="height" multiplier="1:1" id="iBe-Jh-jGB"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="qoe-M4-vIU" firstAttribute="centerX" secondItem="zxV-ft-0Ql" secondAttribute="centerX" id="6Py-Zs-Fcn"/>
+                            <constraint firstItem="qoe-M4-vIU" firstAttribute="top" secondItem="d2e-Px-Ea5" secondAttribute="bottom" constant="40" id="U6f-eC-kEd"/>
+                            <constraint firstItem="d2e-Px-Ea5" firstAttribute="centerX" secondItem="zxV-ft-0Ql" secondAttribute="centerX" id="dNS-TG-4SR"/>
                             <constraint firstItem="qoe-M4-vIU" firstAttribute="centerY" secondItem="zxV-ft-0Ql" secondAttribute="centerY" id="lau-lJ-O6L"/>
                             <constraint firstItem="qoe-M4-vIU" firstAttribute="width" secondItem="zxV-ft-0Ql" secondAttribute="width" multiplier="0.8" id="zMF-8M-dwM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tlG-IT-wXa"/>
                     </view>
                     <connections>
+                        <outlet property="imgView" destination="d2e-Px-Ea5" id="hGH-c4-qzq"/>
                         <outlet property="setLocationView" destination="R0c-El-wmb" id="v1g-Iz-oGu"/>
                         <outlet property="txtEmail" destination="COg-3Q-v1W" id="59C-eW-Zh2"/>
                         <outlet property="txtName" destination="tMa-zd-iOk" id="UBi-ID-BhS"/>
@@ -163,7 +182,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eAM-mU-Mgi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1570" y="115"/>
+            <point key="canvasLocation" x="1570" y="69"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="Fyu-3C-GYA">
@@ -696,7 +715,7 @@
         <!--Friends-->
         <scene sceneID="OMd-w8-zNT">
             <objects>
-                <viewController title="Friends" id="Q7L-JC-N9u" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FriendsViewController" title="Friends" id="Q7L-JC-N9u" customClass="FriendsViewController" customModule="ChatAround" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ImK-Lb-URY">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -715,6 +734,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Md6-yx-8FH"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="O4c-yb-lVB" id="EJt-5J-egq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MQI-1G-FxJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -723,7 +745,7 @@
         <!--Friend Requests-->
         <scene sceneID="id3-Lz-5Jc">
             <objects>
-                <viewController title="Friend Requests" id="kM0-Dc-Q7m" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FriendRequestsViewController" title="Friend Requests" id="kM0-Dc-Q7m" customClass="FriendRequestsViewController" customModule="ChatAround" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="iPP-uH-MU1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -742,6 +764,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jUq-Oq-C7c"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="u7V-7k-Bss" id="Wbh-6T-aQg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M86-5E-lps" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -750,7 +775,7 @@
         <!--Remarkables-->
         <scene sceneID="adW-vh-IxM">
             <objects>
-                <viewController title="Remarkables" id="Nb8-uq-h8T" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RemarkablesViewController" title="Remarkables" id="Nb8-uq-h8T" customClass="RemarkablesViewController" customModule="ChatAround" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="APz-Vz-ivJ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -769,6 +794,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cAH-md-0yP"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="C8Q-eQ-c8r" id="niP-XP-ea2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fua-F9-KFY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -13,21 +13,29 @@ class FriendsViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var dicArr: [[String: Any]] = []
+     var arr: [GeneralModel] = []
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        fetchData()
-        // Do any additional setup after loading the view.
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
+       override func viewDidLoad() {
+           super.viewDidLoad()
+           self.tableView.delegate = self
+           self.tableView.dataSource = self
+           tableView.register(UINib.init(nibName: "FriendsTableViewCell", bundle: nil), forCellReuseIdentifier: "FriendsTableViewCell")
+           // Do any additional setup after loading the view.
+       }
+       
+       override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           getRemarkables()
+       }
 }
 extension FriendsViewController {
+    
+    func fetchData(){}
+}
 
-    func fetchData(){
+
+extension FriendsViewController {
+    func getRemarkables() {
         let ref = db.collection("User").document(UserProfile.shared.userID ?? "").collection("Remarkables")
         self.showIndicator()
         ref.getDocuments { (querySnapshot, error) in
@@ -36,13 +44,51 @@ extension FriendsViewController {
                 self.ErrorMessage(title: "", errorbody: error.localizedDescription)
                 return
             }
+            
             if let querySnapshot = querySnapshot {
+                self.arr.removeAll()
                 for doc in querySnapshot.documents {
-                    print(doc.data())
-                    self.dicArr.append(doc.data())
+                    let result = Result {
+                        try doc.data(as: GeneralModel.self)
+                    }
+                    switch result {
+                    case .success(let obj):
+                        if let obj = obj {
+                            self.arr.append(obj)
+                        } else {
+                            print("Document does not exist")
+                        }
+                    case .failure(let error):
+                        print("Error decoding user: \(error)")
+                    }
                 }
                 self.tableView.reloadData()
             }
         }
+    }
+}
+
+
+extension FriendsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        arr.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell")as! FriendsTableViewCell
+        cell.requestStack.isHidden = true
+        cell.index = indexPath.row
+        cell.object = arr[indexPath.row]
+        cell.configureCell()
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = InfoSheetViewController(nibName: "InfoSheetViewController",bundle: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        80
     }
 }

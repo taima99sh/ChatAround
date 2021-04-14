@@ -82,6 +82,7 @@
             <connections>
                 <outlet property="btnAccept" destination="VBT-dx-4RJ" id="8ha-7k-spm"/>
                 <outlet property="lblName" destination="vOF-ur-YgQ" id="pf5-6R-wy2"/>
+                <outlet property="requestStack" destination="2k3-eB-heq" id="L2R-fW-Odg"/>
             </connections>
             <point key="canvasLocation" x="124.6376811594203" y="152.67857142857142"/>
         </tableViewCell>

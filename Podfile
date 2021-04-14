@@ -13,7 +13,8 @@ pod 'FirebaseFirestoreSwift'
 pod 'MessageKit'
 pod 'SwiftMessages'
 pod 'MBProgressHUD', '~> 1.2.0'
-
-#pod 'YPImagePicker'
+pod 'YPImagePicker', '4.3.1'
+pod 'IQKeyboardManagerSwift'
+pod 'Firebase/Storage'
 
 end

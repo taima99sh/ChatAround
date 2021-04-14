@@ -123,6 +123,7 @@ extension ViewController: CLLocationManagerDelegate {
         for place in places {
             mapView.addAnnotation(place)
         }
+      print("")
     }
     
     func setMapBounds() {
@@ -204,8 +205,8 @@ extension ViewController {
                 self.users = self.cUsers
                 self.bottomSheetVC.tableView.reloadData()
                 self.setMapBounds()
-                self.addPins()
             }
+            self.addPins()
         }
     }
     

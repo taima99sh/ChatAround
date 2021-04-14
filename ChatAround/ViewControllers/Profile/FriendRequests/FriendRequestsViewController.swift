@@ -17,17 +17,20 @@ class FriendRequestsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        getFriendsRequests()
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        tableView.register(UINib.init(nibName: "FriendsTableViewCell", bundle: nil), forCellReuseIdentifier: "FriendsTableViewCell")
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        getFriendsRequests()
     }
 }
 extension FriendRequestsViewController {
     func getFriendsRequests() {
-        let ref = db.collection("User").document(UserProfile.shared.userID ?? "").collection(UserProfile.shared.userID ?? "")
+        let ref = db.collection("User").document(UserProfile.shared.userID ?? "").collection("FreiendRequests")
         self.showIndicator()
         ref.getDocuments { (querySnapshot, error) in
             self.hideIndicator()
@@ -46,7 +49,6 @@ extension FriendRequestsViewController {
                     case .success(let obj):
                         if let obj = obj {
                             self.arr.append(obj)
-                            
                         } else {
                             print("Document does not exist")
                         }
@@ -68,8 +70,10 @@ extension FriendRequestsViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsTableViewCell")as! FriendsTableViewCell
-//        cell.object = messages[indexPath.row]
-//        cell.configureCell()
+        cell.requestStack.isHidden = false
+        cell.index = indexPath.row
+        cell.object = arr[indexPath.row]
+        cell.configureCell()
         return cell
     }
     
@@ -78,9 +82,9 @@ extension FriendRequestsViewController: UITableViewDelegate, UITableViewDataSour
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        <#code#>
-//    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        80
+    }
 }
 
 
