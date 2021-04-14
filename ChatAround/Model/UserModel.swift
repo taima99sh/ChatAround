@@ -19,6 +19,9 @@ class UserModel: NSObject, Codable, MKAnnotation {
     var email: String
     var token: String
     var isOnline: Bool?
+    var type: String?
+    var gender: String?
+    var Db: String?
     var image: UIImage = #imageLiteral(resourceName: "homeImage")
     var geoPoint: GeoPoint?{
         didSet {
@@ -34,7 +37,7 @@ class UserModel: NSObject, Codable, MKAnnotation {
         self.geoPoint = geoPoint
         self.coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
     }
-        
+    
     enum CodingKeys: String, CodingKey {
                 case name = "name"
                 case email = "email"
@@ -45,10 +48,24 @@ class UserModel: NSObject, Codable, MKAnnotation {
 }
 
 struct MessageModel: Codable {
+    
     let sender: String
     let message: String
     let senderName: String
     let date: Date
+}
+
+struct GeneralModel: Codable {
+    let id: String
+    let name: String
+}
+
+//
+struct PlaceModel: Codable {
+    let name: String
+    let email: String
+    let token: String
+    let images: String
 }
 
 

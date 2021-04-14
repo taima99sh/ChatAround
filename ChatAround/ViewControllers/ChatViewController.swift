@@ -52,10 +52,9 @@ class ChatViewController: MessagesViewController {
         // Do any additional setup after loading the view.
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchData()
+        //fetchData()
     }
 }
 extension ChatViewController {
@@ -64,25 +63,50 @@ extension ChatViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         messageInputBar.delegate = self
-        
 //        if let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout {
 //          layout.textMessageSizeCalculator.outgoingAvatarSize = .zero
 //          layout.textMessageSizeCalculator.incomingAvatarSize = .zero
 //        }
     }
     func localized(){}
-    func setupData(){}
+    func setupData(){
+        if let user = self.user {
+            let chatRef = db.collection("User").document(user.token).collection("ChatRoom").order(by: "date", descending: false)
+            chatRef.addSnapshotListener(includeMetadataChanges: false) { (querySnapshot, error) in
+                guard let snapshot = querySnapshot else {
+                  print("Error fetching document: \(error!)")
+                  return
+                }
+                snapshot.documentChanges.forEach { (change) in
+                    print(change)
+                    let result = Result {
+                        try change.document.data(as: MessageModel.self)
+                    }
+                    switch result {
+                    case .success(let message):
+                        if let message = message {
+                            self.messages.append(MyMessage(message))
+                        } else {
+                            print("Document does not exist")
+                        }
+                    case .failure(let error):
+                        print("Error decoding user: \(error)")
+                    }
+                }
+                self.messagesCollectionView.reloadData()
+                self.messagesCollectionView.scrollToLastItem(animated: true)
+            }
+        }
+    }
     func fetchData(){
         self.messages.removeAll()
         if let user = self.user {
             let chatRef = db.collection("User").document(user.token).collection("ChatRoom")
-            
             chatRef.getDocuments { (querySnapshot, error) in
                 if let error = error {
                     print(error.localizedDescription)
                     return
                 }
-                
                 if let querySnapshot = querySnapshot {
                     for doc in querySnapshot.documents {
                         let result = Result {
@@ -99,11 +123,9 @@ extension ChatViewController {
                             print("Error decoding user: \(error)")
                         }
                     }
-                    
                     self.messages.sort {
                         $0.sentDate < $1.sentDate
                     }
-                    
                     self.messagesCollectionView.reloadData()
                 }
             }
@@ -138,11 +160,12 @@ extension ChatViewController: MessagesDisplayDelegate {
 extension ChatViewController: InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         let message = MessageModel(sender: UserProfile.shared.userID ?? "", message: text, senderName: UserProfile.shared.userName ?? "", date: Date())
-        messages.append(MyMessage(message))
-        self.messagesCollectionView.reloadData()
+//        messages.append(MyMessage(message))
+//        self.messagesCollectionView.reloadData()
         messageInputBar.inputTextView.text = ""
         sendMessage(message)
     }
+    
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         avatarView.image = self.user?.image 
     }

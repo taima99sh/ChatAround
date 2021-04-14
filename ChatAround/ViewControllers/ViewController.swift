@@ -32,6 +32,7 @@ class ViewController: UIViewController {
     var userLocation: CLLocation?
     let manager = CLLocationManager ()
     var isFirstTime: Bool = true
+    var places: [UserModel] = []
     var distance: Double {
         return 30000
     }
@@ -42,6 +43,7 @@ class ViewController: UIViewController {
         addBottomSheetView()
         setupView()
         setupData()
+        getPlaces()
         // Do any additional setup after loading the view.
     }
     
@@ -51,23 +53,9 @@ class ViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    @IBAction func btnLogout(_ sender: Any) {
-        do {
-           try Auth.auth().signOut()
-            if let userID = UserProfile.shared.userID {
-                let db = Firestore.firestore()
-                let ref = db.collection("User").document(userID)
-                ref.setData( ["isOnline": false], merge: true)
-//                ref.updateData(["isOnline": false])
-//                ref.updateData(["name": "test"])
-            }
-           UserDefaults.resetDefaults()
-           let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-           AppDelegate.shared.rootNavigationViewController.setViewControllers([vc], animated: true)
-           print("signOut")
-        } catch let error {
-            print(error.localizedDescription)
-        }
+    @IBAction func btnToUserProfile(_ sender: Any) {
+        let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
+        AppDelegate.shared.rootNavigationViewController.pushViewController(vc, animated: true)
     }
 }
 
@@ -82,6 +70,7 @@ extension ViewController {
         manager.allowsBackgroundLocationUpdates = true
         self.mapView.showsUserLocation = true
     }
+    
     func setupData(){
         timer.resume()
         timer.eventHandler = {
@@ -131,15 +120,18 @@ extension ViewController: CLLocationManagerDelegate {
         for user in users {
             mapView.addAnnotation(user)
         }
+        for place in places {
+            mapView.addAnnotation(place)
+        }
     }
     
-    func setMapBound() {
+    func setMapBounds() {
         if let userLocation = self.userLocation {
             let x = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: distance, longitudinalMeters: distance)
             mapView.cameraZoomRange = MKMapView.CameraZoomRange(minCenterCoordinateDistance: 250,
             maxCenterCoordinateDistance: distance)
             mapView.setCameraBoundary(MKMapView.CameraBoundary(coordinateRegion: x), animated: true)
-        }
+         }
     }
 }
 
@@ -150,7 +142,6 @@ extension ViewController: MKMapViewDelegate {
         bottomSheetVC.close()
     }
     
-
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView){
         bottomSheetVC.user = view.annotation as? UserModel
         bottomSheetVC.setupData()
@@ -159,22 +150,28 @@ extension ViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let pin  = annotation as? UserModel {
-            let pinView = MKAnnotationView(annotation: pin, reuseIdentifier: "EcoPin")
-            let transform = CGAffineTransform(scaleX: 0.25, y: 0.25)
-                pinView.transform = transform
-                pinView.image = pin.image
-                return pinView
+            if pin.type == "user" {
+                let pinView = MKAnnotationView(annotation: pin, reuseIdentifier: "EcoPin")
+                let transform = CGAffineTransform(scaleX: 0.25, y: 0.25)
+                    pinView.transform = transform
+                    pinView.image = pin.image
+                    return pinView
+            }
+            //return MKAnnotationView(annotation: pin, reuseIdentifier: "EcoPin")
         }
           return nil
     }
 }
+
+
 extension ViewController {
     
     func fetchUsers() {
-        let db = Firestore.firestore()
+        self.showIndicator()
         let userRef = db.collection("User")
         let query = userRef.whereField("isOnline", isEqualTo: true)
         query.getDocuments { (querySnapshot, error) in
+            self.hideIndicator()
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -190,6 +187,7 @@ extension ViewController {
                     case .success(let user):
                         if let user = user {
                             user.coordinate = CLLocationCoordinate2D(latitude: user.geoPoint?.latitude ?? 0, longitude: user.geoPoint?.longitude ?? 0)
+                            user.type = "user"
                             let location = CLLocation(latitude: user.coordinate.latitude, longitude: user.coordinate.longitude)
                             if (userLocation.distance(from: location) > self.distance) || user.token == UserProfile.shared.userID || location == userLocation {
                                 continue
@@ -205,8 +203,40 @@ extension ViewController {
                 }
                 self.users = self.cUsers
                 self.bottomSheetVC.tableView.reloadData()
-                self.setMapBound()
+                self.setMapBounds()
                 self.addPins()
+            }
+        }
+    }
+    
+    func getPlaces() {
+        let placeRef = db.collectionGroup("Places")
+        placeRef.getDocuments { (querySnapshot, error) in
+            self.hideIndicator()
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            if let querySnapshot = querySnapshot {
+                for doc in querySnapshot.documents {
+                    let result = Result {
+                        try doc.data(as: UserModel.self)
+                    }
+                    switch result {
+                    case .success(let place):
+                        if let place = place {
+                            print(place.email)
+                            place.coordinate = CLLocationCoordinate2D(latitude: place.geoPoint?.latitude ?? 0, longitude: place.geoPoint?.longitude ?? 0)
+                            place.type = "place"
+                            self.places.append(place)
+                        } else {
+                            print("Document does not exist")
+                        }
+                    case .failure(let error):
+                        print("Error decoding user: \(error)")
+                    }
+                }
             }
         }
     }

@@ -9,6 +9,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InfoSheetViewController" customModule="ChatAround" customModuleProvider="target">
             <connections>
+                <outlet property="btnAddFriend" destination="38W-qn-Kvq" id="MRs-8x-AFU"/>
+                <outlet property="btnToChat" destination="ati-uP-ifS" id="DQh-yS-6JK"/>
                 <outlet property="lbFollowing" destination="xm1-D6-ooj" id="6el-rd-6OD"/>
                 <outlet property="lblBio" destination="4X5-gF-Faw" id="2JF-X9-T5h"/>
                 <outlet property="lblFollowers" destination="YzZ-OM-jd2" id="jeq-dQ-A1A"/>
@@ -139,6 +141,26 @@
                                 <action selector="funcToChat:" destination="-1" eventType="touchUpInside" id="WOa-Wz-pQw"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="38W-qn-Kvq">
+                            <rect key="frame" x="308" y="111" width="66" height="24"/>
+                            <color key="backgroundColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="66" id="4zU-Ps-VcS"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
+                            <inset key="titleEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                            <state key="normal" title="Add Friend">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="5"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="btnAddFriend:" destination="-1" eventType="touchUpInside" id="ATN-uV-CsF"/>
+                            </connections>
+                        </button>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pqa-Zk-RxL">
                             <rect key="frame" x="0.0" y="50" width="414" height="812"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -150,10 +172,12 @@
                         <constraint firstAttribute="trailing" secondItem="a0n-J5-WgF" secondAttribute="trailing" id="4gc-eB-JaU"/>
                         <constraint firstItem="ati-uP-ifS" firstAttribute="top" secondItem="a0n-J5-WgF" secondAttribute="top" id="BO9-cl-O5P"/>
                         <constraint firstItem="a0n-J5-WgF" firstAttribute="top" secondItem="NuV-j4-OaF" secondAttribute="bottom" constant="15" id="EqM-TF-pUI"/>
+                        <constraint firstItem="38W-qn-Kvq" firstAttribute="trailing" secondItem="VZl-fs-rIL" secondAttribute="trailing" constant="-20" id="HBJ-C7-VWA"/>
                         <constraint firstAttribute="bottom" secondItem="pqa-Zk-RxL" secondAttribute="bottom" id="Hv1-76-DHq"/>
                         <constraint firstItem="pqa-Zk-RxL" firstAttribute="top" secondItem="NuV-j4-OaF" secondAttribute="bottom" id="SrG-7F-PQ5"/>
                         <constraint firstItem="pqa-Zk-RxL" firstAttribute="leading" secondItem="v25-LA-8Hg" secondAttribute="leading" id="YIA-GX-vH4"/>
                         <constraint firstAttribute="bottom" secondItem="a0n-J5-WgF" secondAttribute="bottom" id="eET-A5-Mag"/>
+                        <constraint firstItem="38W-qn-Kvq" firstAttribute="centerY" secondItem="SM2-su-of8" secondAttribute="centerY" id="eny-lD-1Sz"/>
                         <constraint firstItem="a0n-J5-WgF" firstAttribute="leading" secondItem="v25-LA-8Hg" secondAttribute="leading" id="mYF-ir-dG9"/>
                         <constraint firstAttribute="trailing" secondItem="pqa-Zk-RxL" secondAttribute="trailing" id="nat-N4-Q8K"/>
                         <constraint firstItem="NuV-j4-OaF" firstAttribute="leading" secondItem="v25-LA-8Hg" secondAttribute="leading" id="taa-zA-7Ps"/>

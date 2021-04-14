@@ -326,6 +326,7 @@ PODS:
     - InputBarAccessoryView/Core (= 5.2.3)
   - InputBarAccessoryView/Core (5.2.3)
   - leveldb-library (1.22)
+  - MBProgressHUD (1.2.0)
   - MessageKit (3.5.0):
     - InputBarAccessoryView (~> 5.2.1)
   - nanopb (1.30906.0):
@@ -334,12 +335,17 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
+  - SwiftMessages (9.0.0):
+    - SwiftMessages/App (= 9.0.0)
+  - SwiftMessages/App (9.0.0)
 
 DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Auth
   - FirebaseFirestoreSwift
+  - MBProgressHUD (~> 1.2.0)
   - MessageKit
+  - SwiftMessages
 
 SPEC REPOS:
   trunk:
@@ -361,9 +367,11 @@ SPEC REPOS:
     - GTMSessionFetcher
     - InputBarAccessoryView
     - leveldb-library
+    - MBProgressHUD
     - MessageKit
     - nanopb
     - PromisesObjC
+    - SwiftMessages
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -384,10 +392,12 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   InputBarAccessoryView: f814a0317d47687fafc6bac9e4df6015eaf5b764
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MessageKit: fb539583599cd914e8e2d41fe7bdceb4bf686565
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  SwiftMessages: 55274ca3a239062398603008ed81924cfd1fe798
 
-PODFILE CHECKSUM: 56282553315d5757b253dc819c9343758b25e77e
+PODFILE CHECKSUM: 11654f80fe7a23447d1ec714b84ec9073bfce715
 
 COCOAPODS: 1.10.1

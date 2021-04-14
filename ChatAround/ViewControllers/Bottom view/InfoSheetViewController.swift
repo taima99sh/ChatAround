@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class InfoSheetViewController: UIViewController {
     @IBOutlet weak var topStack: UIStackView!
@@ -16,13 +17,15 @@ class InfoSheetViewController: UIViewController {
     @IBOutlet weak var lbFollowing: UILabel!
     @IBOutlet weak var lblBio: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var btnAddFriend: UIButton!
+    @IBOutlet weak var btnToChat: UIButton!
     
     var user: UserModel?
     var fullView: CGFloat = 100
+    var isRequested: Bool = false
     var partialView: CGFloat {
-        return UIScreen.main.bounds.height - (searchBar.frame.maxY + 25)
+        return UIScreen.main.bounds.height - (searchBar.frame.maxY + 20)
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
@@ -33,7 +36,6 @@ class InfoSheetViewController: UIViewController {
         view.addGestureRecognizer(gesture)
         // Do any additional setup after loading the view.
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         close()
@@ -42,8 +44,20 @@ class InfoSheetViewController: UIViewController {
     @IBAction func funcToChat(_ sender: Any) {
         let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
         vc.user = self.user
-        
         AppDelegate.shared.rootNavigationViewController.pushViewController(vc, animated: true)
+    }
+    
+    @IBAction func btnAddFriend(_ sender: Any) {
+        guard let user = user else {return}
+        if user.type == "user" {
+            if isRequested {
+                removeFreindRequest()
+                return
+            }
+            addFriend()
+            return
+        }
+        addRemarkable()
     }
     
     override func didReceiveMemoryWarning() {
@@ -65,24 +79,107 @@ class InfoSheetViewController: UIViewController {
             self.view.frame = CGRect(x: 0, y: self.fullView, width: self.view.frame.width, height: self.view.frame.height)
             return
         }
+        
         self.tableView.isHidden = true
         UIView.animate(withDuration: 0.3, animations: {
             let frame = self.view.frame
             self.view.frame = CGRect(x: 0, y: self.topStack.frame.maxY, width: frame.width, height: frame.height)
         })
-
     }
     
     func setupData() {
         if let user = self.user {
+            if user.type == "user" {
+                self.btnAddFriend.setTitle("Add friend", for: .normal)
+                self.btnToChat.isHidden = false
+            } else {
+              self.btnAddFriend.setTitle("Add", for: .normal)
+                self.btnToChat.isHidden = true
+            }
             self.lblName.text = user.name
             self.lblBio.text = user.email
             open(false)
         }
+        
+    }
+    //For Remarkable Screen
+    func addRemarkable() {
+        if let user = user {
+            let dic = ["name": user.name,
+                       "id": user.token]
+            db.collection("User").document(UserProfile.shared.userID ?? "").collection("Remarkables").document(user.token).setData(dic) { (error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func deleteFromRemarkable() {
+        if let user = user {
+            let ref = db.collection("User").document(UserProfile.shared.userID ?? "").collection("Remarkable").document(user.token)
+            ref.delete { (error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    func addReview() {
+        let rating = 4
+        let comment = "This restaurant has great meals"
+        let dic: [String: Any] = ["rating": rating,
+                   "comment": comment]
+        if let user = user {
+            let ref = db.collection("Places").document(user.token).collection("Reviews")
+            ref.document(user.token).setData(dic) { (error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+    //End of place Screen
+    
+    func addFriend() {
+        if let user = user {
+            let ref = db.collection("User").document(user.token).collection("FreiendRequests")
+            let dic = ["id" : UserProfile.shared.userID ?? "",
+                       "name": UserProfile.shared.userName ?? ""]
+            ref.document(UserProfile.shared.userID ?? "").setData(dic) { (error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                self.btnAddFriend.setTitle("Remove", for: .normal)
+                self.isRequested = true
+            }
+        }
+    }
+    
+    func checkIfFriend() {
+        guard let user = user else {return}
+        let ref = db.collection("Friendships")
+        let query = ref.whereField("users", in: [UserProfile.shared.userID ?? "", user.token])
+    }
+    
+    // end
+    func removeFreindRequest() {
+        if let user = user {
+            let ref = db.collection("User").document(user.token).collection("FreiendRequests").document(UserProfile.shared.userID ?? "")
+            ref.delete { (error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                self.btnAddFriend.setTitle("add friend", for: .normal)
+                self.isRequested = false
+            }
+        }
     }
     
     @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
-        
         let translation = recognizer.translation(in: self.view)
         let velocity = recognizer.velocity(in: self.view)
         let y = self.view.frame.minY
@@ -106,7 +203,6 @@ class InfoSheetViewController: UIViewController {
                 }, completion: nil)
         }
     }
-
 }
 
 extension InfoSheetViewController: UITableViewDelegate, UITableViewDataSource {
@@ -115,7 +211,6 @@ extension InfoSheetViewController: UITableViewDelegate, UITableViewDataSource {
             return parent.users.count
         }
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             if let parent = parent as? ViewController {
                 cell.textLabel?.text = parent.users[indexPath.row].name
@@ -130,7 +225,6 @@ extension InfoSheetViewController: UITableViewDelegate, UITableViewDataSource {
         searchTapped()
     }
 }
-
 
 extension InfoSheetViewController: UISearchBarDelegate {
     

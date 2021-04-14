@@ -19,6 +19,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
@@ -28,15 +29,19 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func btnToRegister(_ sender: Any) {
-        let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "RegisterViewController") as! RegisterViewController
+        let vc = UIStoryboard.mainStoryboard.instantiateViewController(withIdentifier: "FirstViewController") as! FirstViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
+
 extension LoginViewController {
     func login(){
+        
         let email = self.txtEmail.text ?? ""
         let password = self.txtPassword.text ?? ""
+        self.showIndicator()
         Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+            
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -55,13 +60,12 @@ extension LoginViewController {
     }
     
     func getUserInfo(_ ref: DocumentReference) {
-        
         ref.getDocument { (doc, error) in
+            self.hideIndicator()
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
-            
             if let doc = doc {
                 let result = Result {
                     try doc.data(as: UserModel.self)
